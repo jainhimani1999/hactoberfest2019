@@ -1,0 +1,26 @@
+class Solution:
+    def is_valid(self, board, cols, row, col):
+        if cols[col] == 'Q':
+            return False
+        k = 1
+        for i in range(row - 1, -1, -1):
+            if col + k < len(board) and board[i][col + k] == 'Q':
+                return False
+            if col - k >= 0 and board[i][col - k] == 'Q':
+                return False
+            k += 1
+        return True    
+    def solveNQueens(self, n: int) -> List[List[str]]:
+        board, cols, result = [['.' for i in range(n)] for j in range(n)], ['.' for i in range(n)], []
+        def solver(result, board, cols, n, row):
+            if row == n:
+                result.append(["".join(board[i]) for i in range(len(board))])
+                return
+            for i in range(n):
+                if self.is_valid(board, cols, row, i):
+                    board[row][i], cols[i] = 'Q', 'Q'
+                    solver(result, board, cols, n, row + 1)
+                    board[row][i], cols[i] = '.', '.'
+        solver(result, board, cols, n, 0)
+        return result
+		
